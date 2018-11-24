@@ -117,7 +117,7 @@ namespace Kalkulator_ASP
                     case "E":
                         MakeCalcOperation();
                         calcData.number1 = calcData.result;
-                        txtOutput.Text = calcData.result;
+                        txtOutput.Text = calcData.result; 
                         break;
                 }
             }
