@@ -60,7 +60,7 @@
                 </tr>
                 <tr>
                     <td colspan="2"><asp:Button ID="btn0" CssClass="calcWideButton" runat="server" Text="0" OnCommand="btnCalcCommand" CommandArgument="0"/></td>
-                    <td><asp:Button ID="btnDot" CssClass="calcButton" runat="server" Text="." OnCommand="btnCalcCommand" CommandArgument="."/></td>
+                    <td><asp:Button ID="btnDot" CssClass="calcButton" runat="server" Text="," OnCommand="btnCalcCommand" CommandArgument=","/></td>
                     <td><asp:Button ID="btnPlus" CssClass="calcButton" runat="server" Text="+" OnCommand="btnCalcCommand" CommandArgument="+" /></td>
                 </tr>
             </table>
