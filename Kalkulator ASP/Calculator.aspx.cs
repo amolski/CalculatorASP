@@ -9,6 +9,7 @@ namespace Kalkulator_ASP
 {
     public partial class Calculator : System.Web.UI.Page
     {
+        
         private class CalcData
         {
             public string number1;
@@ -16,7 +17,6 @@ namespace Kalkulator_ASP
             public string result;
             public string operation;
             public bool isComa;
-
             public CalcData()
             {
                 number1 = "0";
@@ -28,7 +28,7 @@ namespace Kalkulator_ASP
         }
 
         CalcData calcData;
-        
+
         protected void Page_Load(object sender, EventArgs e)
         {
             calcData = new CalcData();
@@ -44,6 +44,7 @@ namespace Kalkulator_ASP
 
         protected void btnCalcCommand(object sender, CommandEventArgs e)
         {
+            
             string arg = e.CommandArgument.ToString();
             bool isNumber = int.TryParse(arg, out int number);
             if (isNumber)
@@ -57,19 +58,36 @@ namespace Kalkulator_ASP
             }
             else
             {
+                
                 switch (arg)
                 {
                     case "+":
-                        calcData.operation = "+";
-                        calcData.number2 = calcData.number1;
-                        calcData.number1 = "0";
-                        calcData.isComa = false;
+                        if (calcData.operation != "+")
+                        {
+                            calcData.operation = "+";
+                            PushCalcDataNumber1toNumber2();
+                        }
                         break;
                     case "-":
+                        if (calcData.operation != "-")
+                        {
+                            calcData.operation = "-";
+                            PushCalcDataNumber1toNumber2();
+                        }
                         break;
                     case "/":
+                        if (calcData.operation != "/")
+                        {
+                            calcData.operation = "/";
+                            PushCalcDataNumber1toNumber2();
+                        }
                         break;
                     case "*":
+                        if (calcData.operation != "*")
+                        {
+                            calcData.operation = "*";
+                            PushCalcDataNumber1toNumber2();
+                        }
                         break;
                     case ",":
                         if (!calcData.isComa)
@@ -77,17 +95,28 @@ namespace Kalkulator_ASP
                             calcData.number1 += arg;
                             calcData.isComa = true;
                             txtOutput.Text = calcData.number1;
-                        } 
+                        }
                         break;
                     case "C":
                         calcData = new CalcData();
                         txtOutput.Text = calcData.result;
                         break;
                     case "L":
+                        char toDelete = calcData.number1[calcData.number1.Length - 1];
+                        if(toDelete == ',')
+                        {
+                            calcData.isComa = false;
+                        }
+                        calcData.number1 = calcData.number1.Remove(calcData.number1.Length-1, 1);
+                        if(calcData.number1.Length == 0)
+                        {
+                            calcData.number1 = "0";
+                        }
+                        txtOutput.Text = calcData.number1;
                         break;
                     case "E":
                         MakeCalcOperation();
-                        calcData.number2 = "0";
+                        calcData.number1 = calcData.result;
                         txtOutput.Text = calcData.result;
                         break;
                 }
@@ -126,7 +155,7 @@ namespace Kalkulator_ASP
             ViewState["operation"] = calcData.operation;
             ViewState["result"] = calcData.result;
         }
-        
+
         void MakeCalcOperation()
         {
             double number1 = double.Parse(calcData.number1);
@@ -135,19 +164,34 @@ namespace Kalkulator_ASP
             switch (calcData.operation)
             {
                 case "+":
-                    result += number1 + number2;
+                    result = number2 + number1;
+                    break;
+                case "-":
+                    result = number2 - number1;
+                    break;
+                case "/":
+                    result = number2 / number1;
+                    break;
+                case "*":
+                    result = number1 * number2;
                     break;
                 default:
                     break;
             }
-            number2 = number1;
             number1 = 0;
-            calcData.isComa = false;
             calcData.operation = null;
             calcData.number1 = number1.ToString();
             calcData.number2 = number2.ToString();
             calcData.result = result.ToString();
         }
+
+        void PushCalcDataNumber1toNumber2()
+        {
+            calcData.number2 = calcData.number1;
+            calcData.number1 = "0";
+            calcData.isComa = false;
+        }
+        
 
     }
 }
